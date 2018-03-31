@@ -10,6 +10,7 @@ MYSQL_PORT=${MYSQL_PORT_3306_TCP_PORT:-${MYSQL_PORT}}
 MYSQL_PORT=${MYSQL_PORT_1_3306_TCP_PORT:-${MYSQL_PORT}}
 MYSQL_USER=${MYSQL_USER:-${MYSQL_ENV_MYSQL_USER}}
 MYSQL_PASS=${MYSQL_PASS:-${MYSQL_ENV_MYSQL_PASS}}
+MYSQL_DB=${MYSQL_DB:-${MYSQL_ENV_MYSQL_DATABASE}}
 
 [ -z "${MYSQL_HOST}" ] && { echo "=> MYSQL_HOST cannot be empty" && exit 1; }
 [ -z "${MYSQL_PORT}" ] && { echo "=> MYSQL_PORT cannot be empty" && exit 1; }
@@ -51,7 +52,7 @@ rm -f /restore.sh
 cat <<EOF >> /restore.sh
 #!/bin/bash
 echo "=> Restore database from \$1"
-if mysql -h${MYSQL_HOST} -P${MYSQL_PORT} -u${MYSQL_USER} -p${MYSQL_PASS} < \$1 ;then
+if mysql -h${MYSQL_HOST} -P${MYSQL_PORT} -u${MYSQL_USER} -p${MYSQL_PASS} ${MYSQL_DB} < \$1 ;then
     echo "   Restore succeeded"
 else
     echo "   Restore failed"
